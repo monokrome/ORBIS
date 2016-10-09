@@ -158,7 +158,7 @@
     frameUpdate(deltaTime) {
       this.sky.tilePosition.x += 0.5 * deltaTime;
       this.sky.tilePosition.y += 0.3 * deltaTime;
-      this.cityScape.height = TILE_SIZE;
+      this.cityScape.tilePosition.x += 4 * deltaTime;
     }
   }
 
