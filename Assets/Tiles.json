@@ -70,71 +70,131 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 8,
                     "rot": 0,
                     "x": 8
+=======
+                    "y": 1,
+                    "index": 8,
+                    "rot": 0,
+                    "x": 0
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 9,
                     "rot": 0,
                     "x": 9
+=======
+                    "y": 1,
+                    "index": 9,
+                    "rot": 0,
+                    "x": 1
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 10,
                     "rot": 0,
                     "x": 10
+=======
+                    "y": 1,
+                    "index": 10,
+                    "rot": 0,
+                    "x": 2
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 11,
                     "rot": 0,
                     "x": 11
+=======
+                    "y": 1,
+                    "index": 11,
+                    "rot": 0,
+                    "x": 3
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 12,
                     "rot": 0,
                     "x": 12
+=======
+                    "y": 1,
+                    "index": 12,
+                    "rot": 0,
+                    "x": 4
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 13,
                     "rot": 0,
                     "x": 13
+=======
+                    "y": 1,
+                    "index": 13,
+                    "rot": 0,
+                    "x": 5
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 14,
                     "rot": 0,
                     "x": 14
+=======
+                    "y": 1,
+                    "index": 14,
+                    "rot": 0,
+                    "x": 6
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 0,
                     "index": 15,
                     "rot": 0,
                     "x": 15
+=======
+                    "y": 1,
+                    "index": 15,
+                    "rot": 0,
+                    "x": 7
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 16,
                     "rot": 0,
                     "x": 0
@@ -142,7 +202,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 17,
                     "rot": 0,
                     "x": 1
@@ -150,7 +214,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 18,
                     "rot": 0,
                     "x": 2
@@ -158,7 +226,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 19,
                     "rot": 0,
                     "x": 3
@@ -166,7 +238,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 20,
                     "rot": 0,
                     "x": 4
@@ -174,7 +250,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 21,
                     "rot": 0,
                     "x": 5
@@ -182,7 +262,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 22,
                     "rot": 0,
                     "x": 6
@@ -190,7 +274,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
+=======
+                    "y": 2,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 23,
                     "rot": 0,
                     "x": 7
@@ -198,71 +286,131 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 24,
                     "rot": 0,
                     "x": 8
+=======
+                    "y": 3,
+                    "index": 24,
+                    "rot": 0,
+                    "x": 0
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 25,
                     "rot": 0,
                     "x": 9
+=======
+                    "y": 3,
+                    "index": 25,
+                    "rot": 0,
+                    "x": 1
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 26,
                     "rot": 0,
                     "x": 10
+=======
+                    "y": 3,
+                    "index": 26,
+                    "rot": 0,
+                    "x": 2
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 27,
                     "rot": 0,
                     "x": 11
+=======
+                    "y": 3,
+                    "index": 27,
+                    "rot": 0,
+                    "x": 3
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 28,
                     "rot": 0,
                     "x": 12
+=======
+                    "y": 3,
+                    "index": 28,
+                    "rot": 0,
+                    "x": 4
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 29,
                     "rot": 0,
                     "x": 13
+=======
+                    "y": 3,
+                    "index": 29,
+                    "rot": 0,
+                    "x": 5
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 30,
                     "rot": 0,
                     "x": 14
+=======
+                    "y": 3,
+                    "index": 30,
+                    "rot": 0,
+                    "x": 6
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 1,
                     "index": 31,
                     "rot": 0,
                     "x": 15
+=======
+                    "y": 3,
+                    "index": 31,
+                    "rot": 0,
+                    "x": 7
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 32,
                     "rot": 0,
                     "x": 0
@@ -270,7 +418,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 33,
                     "rot": 0,
                     "x": 1
@@ -278,7 +430,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 34,
                     "rot": 0,
                     "x": 2
@@ -286,7 +442,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 35,
                     "rot": 0,
                     "x": 3
@@ -294,7 +454,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 36,
                     "rot": 0,
                     "x": 4
@@ -302,7 +466,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 37,
                     "rot": 0,
                     "x": 5
@@ -310,7 +478,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 38,
                     "rot": 0,
                     "x": 6
@@ -318,7 +490,11 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
+=======
+                    "y": 4,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "index": 39,
                     "rot": 0,
                     "x": 7
@@ -326,6 +502,7 @@
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 2,
                     "index": 40,
                     "rot": 0,
@@ -393,59 +570,95 @@
                     "y": 3,
                     "index": 48,
                     "rot": 0,
+=======
+                    "y": 5,
+                    "index": 40,
+                    "rot": 0,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "x": 0
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 49,
+=======
+                    "y": 5,
+                    "index": 41,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "rot": 0,
                     "x": 1
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 50,
+=======
+                    "y": 5,
+                    "index": 42,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "rot": 0,
                     "x": 2
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 51,
+=======
+                    "y": 5,
+                    "index": 43,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "rot": 0,
                     "x": 3
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 52,
+=======
+                    "y": 5,
+                    "index": 44,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "rot": 0,
                     "x": 4
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 53,
+=======
+                    "y": 5,
+                    "index": 45,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "rot": 0,
                     "x": 5
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 54,
+=======
+                    "y": 5,
+                    "index": 46,
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                     "rot": 0,
                     "x": 6
                 },
                 {
                     "tile": -1,
                     "flipX": false,
+<<<<<<< HEAD
                     "y": 3,
                     "index": 55,
                     "rot": 0,
@@ -2050,13 +2263,27 @@
                     "index": 255,
                     "rot": 0,
                     "x": 15
+=======
+                    "y": 5,
+                    "index": 47,
+                    "rot": 0,
+                    "x": 7
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e
                 }
             ],
             "number": 0
         }
     ],
+<<<<<<< HEAD
     "tilewidth": 128,
     "tileswide": 16,
     "tileheight": 128,
     "tileshigh": 16
 }
+=======
+    "tilewidth": 16,
+    "tileswide": 8,
+    "tileheight": 16,
+    "tileshigh": 6
+}
+>>>>>>> de49235000484fcaafebbaa96163a79f2a2b036e

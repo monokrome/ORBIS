@@ -45,7 +45,6 @@
         TILE_SIZE, TILE_SIZE
       ));
 
-      // Assign new texture into cache.
       this.textureMap[x] = this.textureMap[x] || {};
       this.textureMap[x][y] = {texture: texture};
       return texture;
