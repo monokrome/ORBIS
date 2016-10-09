@@ -6,14 +6,16 @@
 
 
   const VERSION = '0.0.1-prealpha',
-        TILE_SIZE = 16,
+
+        TILE_SIZE = 128,
         TILE_SCALE = 1,
 
-        X_SIZE = 9 * TILE_SIZE * TILE_SCALE,
-        Y_SIZE = 9 * TILE_SIZE * TILE_SCALE,
+        X_SIZE = 4 * TILE_SIZE * TILE_SCALE,
+        Y_SIZE = 4 * TILE_SIZE * TILE_SCALE,
 
         TILESET_RESOURCE_NAME = 'tileset',
         TILEMAP_RESOURCE_NAME = 'tilemap',
+
         debugEnabled = window.location.search.indexOf('debug') > -1,
         verboseEnabled = window.location.search.indexOf('verbose') > -1;
 
@@ -35,9 +37,8 @@
 
     createTexture(x, y) {
       // Reuse a texture if it has already been created.
-      if (this.textureMap[x] && this.textureMap[x][y]) {
+      if (this.textureMap[x] && this.textureMap[x][y])
           return this.textureMap[x][y].texture;
-      }
 
       const texture = new PIXI.Texture(this.texture, new PIXI.Rectangle(
         (x * TILE_SIZE), y * TILE_SIZE,
@@ -156,8 +157,8 @@
     }
 
     frameUpdate(deltaTime) {
-      this.sky.tilePosition.x += 0.025 * deltaTime;
-      this.sky.tilePosition.y += 0.02 * deltaTime;
+      this.sky.tilePosition.x += 0.5 * deltaTime;
+      this.sky.tilePosition.y += 0.3 * deltaTime;
       this.cityScape.height = TILE_SIZE;
     }
   }
