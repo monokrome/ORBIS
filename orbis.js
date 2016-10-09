@@ -10,7 +10,7 @@
         TILE_SIZE = 128,
         TILE_SCALE = 1,
 
-        X_SIZE = 4 * TILE_SIZE * TILE_SCALE,
+        X_SIZE = 6 * TILE_SIZE * TILE_SCALE,
         Y_SIZE = 4 * TILE_SIZE * TILE_SCALE,
 
         TILESET_RESOURCE_NAME = 'tileset',
