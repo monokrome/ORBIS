@@ -17,7 +17,7 @@ class ORBISGame {
   onCreate() {
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.player = this.game.add.sprite(128, this.game.world.height - 150, 'vix');
+    this.player = this.game.add.sprite(0, this.game.world.height - 150, 'vix');
     this.game.physics.arcade.enable(this.player);
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -38,7 +38,7 @@ class ORBISGame {
     this.player.animations.play(this.idleAnimation);
   }
 
-  checkControlState() {
+  updatePlayerState() {
     if (this.cursors.left.isDown && !this.cursors.right.isDown) {
       this.player.body.velocity.x = this.walkRate * -1;
       this.player.animations.play('left');
@@ -53,10 +53,17 @@ class ORBISGame {
       this.player.body.velocity.x = 0;
       this.player.animations.play(this.idleAnimation);
     }
+
+    if (this.player.body.velocity.x > 0 && this.player.body.position.x > this.game.world.width * 0.80) {
+      this.player.body.velocity.x = 0;
+    }
+    else if (this.player.body.velocity.x < 0 && this.player.body.position.x < this.game.world.width / 10) {
+      this.player.body.velocity.x = 0;
+    }
   }
 
   onUpdate() {
-    this.checkControlState();
+    this.updatePlayerState();
   }
 }
 
