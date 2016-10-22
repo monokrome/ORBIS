@@ -5,13 +5,11 @@
   "main": "src/main.js",
   "name": "phaser-electron-starter",
   "version": "0.1.0",
-
   "scripts": {
     "start": "ELECTRON_DEBUG=1 ./node_modules/.bin/electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-
-  "dependencies": {
+  "devDependencies": {
     "electron-prebuilt": "^1.4.3"
   }
 }
