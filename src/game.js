@@ -31,13 +31,14 @@ class ORBISGame {
     this.player = this.game.add.sprite(0, this.game.world.height - 150, 'vix');
 
     this.game.physics.arcade.enable(this.player);
-    this.player.body.gravity.y = 300;
+    this.player.body.gravity.y = 940;
     this.player.body.collideWorldBounds = true;
 
     Object.assign(this.player.data, {
       currentCharge: 1,
       idleAnimation: 'idleRight',
-      jumpForce: 20,
+      jumpForce: 350,
+      maxJumpsAllowed: 2,
       walkRate: 138,
     });
 
@@ -63,35 +64,78 @@ class ORBISGame {
 
     this.createWorld();
     this.createPlayer();
+
+    this.lastFrameTime = +(new Date);
   }
 
-  jump() {
-    console.dir('Hi.');
+  jump(scalar) {
+    scalar = scalar || 1;
+    this.player.body.velocity.y = (this.player.data.jumpForce * -1) * scalar;
+    this.player.data.jumpsRemaining--;
+    this.lastJumpTime = this.currentFrameTime;
+    this.player.data.jumpPressed = true;
   }
 
-  updatePlayerState() {
-    const hitPlatform = this.game.physics.arcade.collide(this.player, this.platforms);
+  wallJump(scalar) {
+    scalar = scalar || 1;
+    this.player.body.velocity.x = (this.player.data.jumpForce * 10.6) * scalar;
+    this.jump(0.2);
+    this.player.data.jumpsRemaining = 0;
+  }
 
-    if (hitPlatform && this.cursors.up.isDown) this.jump();
+  checkJump() {
+    if (this.player.data.jumpPressed && (!this.cursors.up.isDown || (
+          (this.currentFrameTime - this.lastJumpTime) < 1500))
+        ) {
+      this.player.data.jumpPressed = false;
+    }
+
+    if (this.player.body.touching.down && this.player.data.jumpsRemaining != this.player.data.maxJumpsAllowed)
+      this.player.data.jumpsRemaining = this.player.data.maxJumpsAllowed;
+
+    if (!this.player.data.jumpsRemaining || this.player.data.jumpPressed) return;
+    console.dir('Reset');
+
+    if (this.player.body.touching.right) this.wallJump(-1);
+    else if (this.player.body.touching.left) this.wallJump();
+    else if (this.cursors.up.isDown) this.jump();
+  }
+
+  checkMovement() {
+    const isInAir = !this.player.body.touching.down;
 
     if (this.cursors.left.isDown && !this.cursors.right.isDown) {
       this.player.body.velocity.x = this.player.data.walkRate * -1;
       this.player.animations.play('left');
       this.player.data.idleAnimation = 'idleLeft';
-
     } else if (!this.cursors.left.isDown && this.cursors.right.isDown) {
       this.player.body.velocity.x = this.player.data.walkRate;
       this.player.animations.play('right');
       this.player.data.idleAnimation = 'idleRight';
-
-    } else {
+    } else if (!isInAir) {
       this.player.body.velocity.x = 0;
       this.player.animations.play(this.player.data.idleAnimation);
     }
+
+    if (isInAir && this.player.body.velocity.x != 0)
+      this.player.body.velocity.x *= 0.8;
+  }
+
+  updateWorldState(deltaTime) {}
+
+  updatePlayerState(deltaTime) {
+    this.game.physics.arcade.collide(this.player, this.platforms);
+    this.checkMovement();
+    this.checkJump();
   }
 
   onUpdate() {
-    this.updatePlayerState();
+    this.currentFrameTime = +(new Date);
+    const deltaTime = this.currentFrameTime - this.lastFrameTime;
+
+    this.updateWorldState(deltaTime);
+    this.updatePlayerState(deltaTime);
+    this.lastFrameTime = this.currentFrameTime;
   }
 }
 

@@ -3,10 +3,10 @@
   "description": "Starter project for electron + phaser projects.",
   "license": "MIT",
   "main": "src/main.js",
-  "name": "phaser-electron-starter",
+  "name": "ORBIS",
   "version": "0.1.0",
   "scripts": {
-    "start": "ELECTRON_DEBUG=1 ./node_modules/.bin/electron .",
+    "start": "./node_modules/.bin/electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

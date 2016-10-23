@@ -34,7 +34,7 @@ class ORBISDesktop {
 
     this.window.setMenu(null);
 
-    if (typeof process.env.ELECTRON_DEBUG !== 'undefined')
+    //if (typeof process.env.ELECTRON_DEBUG !== 'undefined')
       this.window.webContents.openDevTools('detached');
 
     this.window.loadURL(`file://${__dirname}/../index.html`);
