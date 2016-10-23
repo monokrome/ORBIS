@@ -29,13 +29,15 @@ class ORBISDesktop {
       frame: false,
       fullscreen: false,
       resizable: false,
+      width: 1024,
+      height: 768,
       useContentSize: true,
     });
 
     this.window.setMenu(null);
 
     //if (typeof process.env.ELECTRON_DEBUG !== 'undefined')
-      this.window.webContents.openDevTools('detached');
+      this.window.webContents.openDevTools('docked');
 
     this.window.loadURL(`file://${__dirname}/../index.html`);
     this.window.on('closed', this.onWindowClosed.bind(this));
