@@ -15,8 +15,6 @@ export default class ORBIS extends GameObject {
     });
 
     [Backdrop, World, Player].map(this.appendChild.bind(this));
-
-    debugger;
   }
 
   create() {

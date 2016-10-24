@@ -2,7 +2,8 @@
 
 
 const path = require('path'),
-      HTMLWebpackPlugin = require('html-webpack-plugin');
+      HTMLWebpackPlugin = require('html-webpack-plugin'),
+      CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = require('webpack-validator')({
@@ -42,5 +43,10 @@ module.exports = require('webpack-validator')({
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname, 'index.html'),
     }),
+
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, 'assets'),
+      to: path.resolve(__dirname, 'dist/assets')
+    }])
   ]
 });

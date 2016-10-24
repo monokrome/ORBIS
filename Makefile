@@ -6,7 +6,10 @@ production:
 	./node_modules/.bin/webpack --production --progress --colors
 
 
-development:
+watch:
+	./node_modules/.bin/webpack --progress --colors --hot --inline --watch
+
+server:
 	./node_modules/.bin/webpack-dev-server --progress --colors --hot --inline --watch
 
 
