@@ -18,6 +18,11 @@ class GameObject {
   // Utility functions useful for most GameObjects
   createGameObject(Kind) { return new Kind(this.game); }
 
+  setupCollision(left, right) {
+    if (!left.sprite || !right.sprite) return false;
+    return this.game.physics.arcade.collide(left.sprite, right.sprite);
+  }
+
   appendChild(instance) {
     if (!(instance instanceof GameObject)) instance = this.createGameObject(instance);
     this.children.add(instance);
@@ -35,7 +40,7 @@ class GameObject {
 
   findChildrenByClassName(className, recurse) {
     const results = this.classNameToChildrenMap.get(className) || new Set;
-    if (!recurse) return items;
+    if (!recurse) return results;
 
     for (const child of items)
       for (const subChild of child.findChildrenByClassName(className, recurse))
@@ -99,72 +104,72 @@ class GameObject {
 }
 
 
-class CompanionGameObject extends GameObject {
+class Companion extends GameObject {
   preload() {
     this.loadSpriteSheet('orb', 128);
     super.preload();
   }
 
   create() {
-      this.companion = this.enablePhysics(this.game.add.sprite(
+      this.sprite = this.enablePhysics(this.game.add.sprite(
         0, this.game.world.height - (TILE_SIZE * 2),
         'orb'
       ));
 
-      Object.assign(this.companion.data, {
+      Object.assign(this.sprite.data, {
         maxSpeed: 300,
         thrustAccuracy: 0.1,
       });
 
-      this.companion.anchor.y = this.companion.anchor.x = 0.56;
-      this.companion.scale.setTo(1.4);
+      this.sprite.anchor.y = this.sprite.anchor.x = 0.56;
+      this.sprite.scale.setTo(1.4);
 
-      this.companion.animations.add('idle', [1,2], 2, true);
-      this.companion.animations.add('turning', [5,6,7,8], 8, true);
-      this.companion.animations.play('idle');
+      this.sprite.animations.add('idle', [1,2], 2, true);
+      this.sprite.animations.add('turning', [5,6,7,8], 8, true);
+      this.sprite.animations.play('idle');
       super.create();
   }
 
   frameUpdate(deltaTime) {
-    const idealY = this.player.body.position.y + (TILE_SIZE * 0.2),
-          accuracy = this.companion.data.maxSpeed - (
+    const idealY = this.sprite.body.position.y + (TILE_SIZE * 0.2),
+          accuracy = this.sprite.data.maxSpeed - (
             Math.sin(this.currentFrameTime * 0.5)
-            * this.companion.data.thrustAccuracy
-            * this.companion.data.maxSpeed
+            * this.sprite.data.thrustAccuracy
+            * this.sprite.data.maxSpeed
           );
 
-    if (this.companion.position.y > idealY) {
-      this.companion.body.velocity.y = accuracy * 0.2;
-    } else if (this.companion.position.y < idealY) {
-      this.companion.body.velocity.y = accuracy * 0.2 * -1;
+    if (this.sprite.position.y > idealY) {
+      this.sprite.body.velocity.y = accuracy * 0.2;
+    } else if (this.sprite.position.y < idealY) {
+      this.sprite.body.velocity.y = accuracy * 0.2 * -1;
     } else {
-      this.companion.body.velocity.y = 0;
+      this.sprite.body.velocity.y = 0;
     }
 
-    this.companion.body.velocity.y = ((accuracy) - this.companion.data.maxSpeed);
+    this.sprite.body.velocity.y = ((accuracy) - this.sprite.data.maxSpeed);
 
-    if (this.player.body.velocity.x > 0) {
-      const idealX = this.player.body.position.x - (TILE_SIZE * 0.7)
+    if (this.sprite.body.velocity.x > 0) {
+      const idealX = this.sprite.body.position.x - (TILE_SIZE * 0.7)
 
-      this.companion.scale.x = 1.4;
+      this.sprite.scale.x = 1.4;
 
-      if (this.companion.body.position.x < idealX)
-        this.companion.body.velocity.x = accuracy;
+      if (this.sprite.body.position.x < idealX)
+        this.sprite.body.velocity.x = accuracy;
       else
-        this.companion.body.velocity.x = 0;
+        this.sprite.body.velocity.x = 0;
 
-    } else if (this.player.body.velocity.x < 0) {
-      const idealX = this.player.body.position.x + this.player.body.width
+    } else if (this.sprite.body.velocity.x < 0) {
+      const idealX = this.sprite.body.position.x + this.sprite.body.width
                      + (TILE_SIZE * 0.7);
 
-      this.companion.scale.x = -1.4;
+      this.sprite.scale.x = -1.4;
 
-      if (this.companion.body.position.x > idealX)
-        this.companion.body.velocity.x = accuracy * -1;
+      if (this.sprite.body.position.x > idealX)
+        this.sprite.body.velocity.x = accuracy * -1;
       else
-        this.companion.body.velocity.x = 0;
+        this.sprite.body.velocity.x = 0;
     } else {
-      this.companion.body.velocity.x = 0;
+      this.sprite.body.velocity.x = 0;
     }
 
     super.frameUpdate(deltaTime);
@@ -172,7 +177,7 @@ class CompanionGameObject extends GameObject {
 }
 
 
-class PlayerGameObject extends GameObject {
+class Player extends GameObject {
   preload() {
       this.loadSpriteSheet('vix');
       super.preload();
@@ -181,12 +186,12 @@ class PlayerGameObject extends GameObject {
   create() {
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
-    this.player = this.enablePhysics(this.game.add.sprite(
+    this.sprite = this.enablePhysics(this.game.add.sprite(
       0, this.game.world.height - (TILE_SIZE * 2),
       'vix'
     ));
 
-    Object.assign(this.player.data, {
+    Object.assign(this.sprite.data, {
       currentCharge: 1,
       idleAnimation: 'idleRight',
       jumpForce: 350,
@@ -194,84 +199,101 @@ class PlayerGameObject extends GameObject {
       walkRate: 164,
     });
 
-    this.applyGravity(this.player);
-    this.player.body.collideWorldBounds = true;
+    this.applyGravity(this.sprite);
+    this.sprite.body.collideWorldBounds = true;
 
-    this.player.animations.add('idleLeft', [48, 49, 50], 12, true);
-    this.player.animations.add('idleRight', [32, 33, 34], 12, true);
+    this.sprite.animations.add('idleLeft', [48, 49, 50], 12, true);
+    this.sprite.animations.add('idleRight', [32, 33, 34], 12, true);
 
-    this.player.animations.add('walkLeft', [
+    this.sprite.animations.add('walkLeft', [
       17, 18, 19, 20,
       21, 22, 23, 24,
     ], 12, true);
 
-    this.player.animations.add('walkRight', [
+    this.sprite.animations.add('walkRight', [
       1, 2, 3, 4,
       5, 6, 7, 8,
     ], 12, true);
 
-    this.player.animations.play(this.player.data.idleAnimation);
+    this.sprite.animations.play(this.sprite.data.idleAnimation);
 
     super.create();
   }
 
   jump(scalar) {
     scalar = scalar || 1;
-    this.player.body.velocity.y = (this.player.data.jumpForce * -1) * scalar;
-    this.player.data.jumpsRemaining--;
+    this.sprite.body.velocity.y = (this.sprite.data.jumpForce * -1) * scalar;
+    this.sprite.data.jumpsRemaining--;
     this.lastJumpTime = this.currentFrameTime;
-    this.player.data.jumpPressed = true;
+    this.sprite.data.jumpPressed = true;
   }
 
   wallJump(scalar) {
     scalar = scalar || 1;
-    this.player.body.velocity.x = (this.player.data.jumpForce * 10.6) * scalar;
+    this.sprite.body.velocity.x = (this.sprite.data.jumpForce * 10.6) * scalar;
     this.jump(0.2);
-    this.player.data.jumpsRemaining = 0;
+    this.sprite.data.jumpsRemaining = 0;
   }
 
   checkJump() {
-    if (this.player.data.jumpPressed && (!this.cursors.up.isDown || (
+    if (this.sprite.data.jumpPressed && (!this.cursors.up.isDown || (
           (this.currentFrameTime - this.lastJumpTime) < 1500))
         ) {
-      this.player.data.jumpPressed = false;
+      this.sprite.data.jumpPressed = false;
     }
 
-    if (this.player.body.touching.down && this.player.data.jumpsRemaining != this.player.data.maxJumpsAllowed)
-      this.player.data.jumpsRemaining = this.player.data.maxJumpsAllowed;
+    if (this.sprite.body.touching.down && this.sprite.data.jumpsRemaining != this.sprite.data.maxJumpsAllowed)
+      this.sprite.data.jumpsRemaining = this.sprite.data.maxJumpsAllowed;
 
-    if (!this.player.data.jumpsRemaining || this.player.data.jumpPressed) return;
+    if (!this.sprite.data.jumpsRemaining || this.sprite.data.jumpPressed) return;
 
-    if (this.player.body.touching.right) this.wallJump(-1);
-    else if (this.player.body.touching.left) this.wallJump();
+    if (this.sprite.body.touching.right) this.wallJump(-1);
+    else if (this.sprite.body.touching.left) this.wallJump();
     else if (this.cursors.up.isDown) this.jump();
   }
 
   checkMovement() {
-    const isInAir = !this.player.body.touching.down;
+    const isInAir = !this.sprite.body.touching.down;
 
     if (this.cursors.left.isDown && !this.cursors.right.isDown) {
-      this.player.body.velocity.x = this.player.data.walkRate * -1;
-      this.player.animations.play('walkLeft');
-      this.player.data.idleAnimation = 'idleLeft';
+      this.sprite.body.velocity.x = this.sprite.data.walkRate * -1;
+      this.sprite.animations.play('walkLeft');
+      this.sprite.data.idleAnimation = 'idleLeft';
     } else if (!this.cursors.left.isDown && this.cursors.right.isDown) {
-      this.player.body.velocity.x = this.player.data.walkRate;
-      this.player.animations.play('walkRight');
-      this.player.data.idleAnimation = 'idleRight';
+      this.sprite.body.velocity.x = this.sprite.data.walkRate;
+      this.sprite.animations.play('walkRight');
+      this.sprite.data.idleAnimation = 'idleRight';
     } else if (!isInAir) {
-      this.player.body.velocity.x = 0;
-      this.player.animations.play(this.player.data.idleAnimation);
+      this.sprite.body.velocity.x = 0;
+      this.sprite.animations.play(this.sprite.data.idleAnimation);
     }
 
-    if (isInAir && this.player.body.velocity.x != 0)
-      this.player.body.velocity.x *= 0.8;
+    if (isInAir && this.sprite.body.velocity.x != 0)
+      this.sprite.body.velocity.x *= 0.8;
   }
 
   frameUpdate(deltaTime) {
-    this.game.physics.arcade.collide(this.player, this.platforms);
     this.checkJump();
     this.checkMovement();
     super.frameUpdate(deltaTime);
+  }
+}
+
+
+class Backdrop extends GameObject {
+  preload() {
+    this.loadSpriteSheet('environment');
+    super.preload();
+  }
+
+  create() {
+    this.sprite = this.game.add.tileSprite(
+      0, 0,
+      this.game.world.width, this.game.world.height,
+      'environment', 1
+    );
+
+    super.create();
   }
 }
 
@@ -284,17 +306,9 @@ class World extends GameObject {
 
   create() {
     this.game.world.chargeRate = 0.04;
+    this.sprite = this.game.add.group();
+    this.sprite.enableBody = true;
 
-    this.background = this.game.add.group();
-    this.sky = this.game.add.tileSprite(
-      0, 0,
-      this.game.world.width, this.game.world.height,
-      'environment', 1
-    );
-    this.background.add(this.sky);
-
-    this.platforms = this.game.add.group();
-    this.platforms.enableBody = true;
     this.ground = this.enablePhysics(this.game.add.tileSprite(
       0, this.game.world.height - TILE_SIZE,
       this.game.world.width, TILE_SIZE,
@@ -302,7 +316,7 @@ class World extends GameObject {
     ));
 
     this.ground.body.immovable = true;
-    this.platforms.add(this.ground);
+    this.sprite.add(this.ground);
 
     super.create();
   }
@@ -319,7 +333,7 @@ class ORBIS extends GameObject {
       update: this.frameUpdate.bind(this),
     });
 
-    [World, PlayerGameObject].map(this.appendChild.bind(this));
+    [Backdrop, World, Player].map(this.appendChild.bind(this));
   }
 
   create() {
@@ -330,7 +344,14 @@ class ORBIS extends GameObject {
     // The game is a special case where we don't have deltaTime yet, because
     // it is the root object which calculates the deltaTime for us.
     this.currentFrameTime = +(new Date);
-    this.callChildren('frameUpdate', this.currentFrameTime - this.lastFrameTime);
+
+    const players = this.findChildrenByClassName('Player'),
+          worlds = this.findChildrenByClassName('World');
+
+    for (const player of players) for (const world of worlds)
+        this.setupCollision(player, world);
+
+    this.callChildren('frameUpdate', this.currentFrameTime-this.lastFrameTime);
     this.lastFrameTime = this.currentFrameTime;
   }
 }
