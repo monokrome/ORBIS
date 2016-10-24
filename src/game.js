@@ -4,7 +4,7 @@ import Player from './player';
 import Backdrop from './backdrop';
 
 
-export default class ORBIS extends GameObject {
+class ORBIS extends GameObject {
   constructor() {
     super()
 
@@ -43,4 +43,4 @@ export default class ORBIS extends GameObject {
 }
 
 
-this.game = new ORBIS();
+module.exports = new ORBIS();

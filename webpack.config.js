@@ -12,6 +12,8 @@ module.exports = require('webpack-validator')({
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[hash].js',
+    libraryTarget: "var",
+    library: "ORBIS",
   },
 
   resolve: {
