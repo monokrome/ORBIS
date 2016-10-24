@@ -226,24 +226,7 @@ class PlayerGameObject extends GameObject {
 }
 
 
-class ORBIS extends GameObject {
-  constructor() {
-    super()
-
-    this.game = new Phaser.Game(1024, 768, Phaser.AUTO, '', {
-      preload: this.preload.bind(this),
-      create: this.create.bind(this),
-      update: this.frameUpdate.bind(this),
-    });
-
-    this.children = [PlayerGameObject].map(this.createActor.bind(this));
-  }
-
-  preload() {
-    this.loadSpriteSheet('environment');
-    GameObject.prototype.preload.call(this);
-  }
-
+class World extends GameObject {
   create() {
     this.game.world.chargeRate = 0.04;
 
@@ -268,6 +251,26 @@ class ORBIS extends GameObject {
 
     // Why can't I super here? Trick question. ES6 sucks. That's why.
     GameObject.prototype.create.call(this);
+  }
+}
+
+
+class ORBIS extends GameObject {
+  constructor() {
+    super()
+
+    this.game = new Phaser.Game(1024, 768, Phaser.AUTO, '', {
+      preload: this.preload.bind(this),
+      create: this.create.bind(this),
+      update: this.frameUpdate.bind(this),
+    });
+
+    this.children = [World, PlayerGameObject].map(this.createActor.bind(this));
+  }
+
+  preload() {
+    this.loadSpriteSheet('environment');
+    GameObject.prototype.preload.call(this);
   }
 
   frameUpdate() {
