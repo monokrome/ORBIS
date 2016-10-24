@@ -16,7 +16,7 @@ class GameObject {
   }
 
   // Utility functions useful for most GameObjects
-  createGameObject(Kind) { return new Kind(this.game); }
+  createGameObject(Kind) { return new Kind(this.game, this); }
 
   setupCollision(left, right) {
     if (!left.sprite || !right.sprite) return false;
@@ -61,6 +61,11 @@ class GameObject {
     }
 
     return items;
+  }
+
+  getRootGameObject() {
+    if (this.parent) return this.parent.getRootGameObject();
+    return this;
   }
 
   loadSpriteSheet(name, width, height) {
@@ -306,8 +311,16 @@ class Player extends GameObject {
 
 class Backdrop extends GameObject {
   preload() {
+    this.MILLISECONDS_IN_ONE_DAY = 86400000;
+    this.MILLISECONDS_IN_SIX_HOURS = this.MILLISECONDS_IN_ONE_DAY / 4;
+    this.GAME_DAYS_PER_EARTH_DAY = 128;
+
     this.loadSpriteSheet('environment');
     super.preload();
+  }
+
+  getGameTime() {
+    return +(new Date) * this.GAME_DAYS_PER_EARTH_DAY;
   }
 
   create() {
@@ -317,7 +330,20 @@ class Backdrop extends GameObject {
       'environment', 1
     );
 
+    this.rootObject = this.getRootGameObject();
+
     super.create();
+  }
+
+  frameUpdate() {
+    const timeUntilEndOfDay = this.getGameTime() % this.MILLISECONDS_IN_ONE_DAY,
+          framesLeftInDay = timeUntilEndOfDay / this.MILLISECONDS_IN_SIX_HOURS,
+          currentFrame = 4 - parseInt(framesLeftInDay, 10);
+
+    if (this.lastDayNightCycleFrame == currentFrame) return;
+    else this.sprite.frame = currentFrame;
+
+    this.lastDayNightCycleFrame = currentFrame;
   }
 }
 
