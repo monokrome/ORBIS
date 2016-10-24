@@ -9,14 +9,53 @@ class GameObject {
     this.game = game;
     this.parent = parent || null;
 
-    this.children = [];
+    this.children = new Set;
+    this.classNameToChildrenMap = new Map;
+
+    const tags = new Set(this.getTags());
   }
 
   // Utility functions useful for most GameObjects
-  createActor(Kind) { return new Kind(this.game); }
+  createGameObject(Kind) { return new Kind(this.game); }
+
+  appendChild(instance) {
+    if (!(instance instanceof GameObject)) instance = this.createGameObject(instance);
+    this.children.add(instance);
+
+    if (!this.classNameToChildrenMap.has(instance.constructor.name))
+      this.classNameToChildrenMap.set(instance.constructor.name, new Set);
+
+    const set = this.classNameToChildrenMap.get(instance.constructor.name);
+    if (!set.has(instance)) set.add(instance);
+  }
 
   callChildren(method, ...args) {
     for (const gameObject of this.children) gameObject[method](...args);
+  }
+
+  findChildrenByClassName(className, recurse) {
+    const results = this.classNameToChildrenMap.get(className) || new Set;
+    if (!recurse) return items;
+
+    for (const child of items)
+      for (const subChild of child.findChildrenByClassName(className, recurse))
+        results.add(subChild);
+
+    return results;
+  }
+
+  findChildrenByTagName(tagName, recurse) {
+    if (!recurse) return items;
+
+    for (const child of this.children) {
+      if (child.tags.has(tagName)) results.append(child);
+      if (!recurse) continue;
+
+      for (const subChild of child.findChildrenByTagName(tagName, recurse))
+        items.add(subChild);
+    }
+
+    return items;
   }
 
   loadSpriteSheet(name, width, height) {
@@ -54,12 +93,16 @@ class GameObject {
   }
   postFrameUpdate() { this.callChildren('postFrameUpdate'); }
   destroy() { this.callChildren('postFrameUpdate'); }
+
+  // Other functions that GameObjects may want to override
+  getTags() { return; }  // Allows organizing of GameObjects by tag names
 }
 
 
 class CompanionGameObject extends GameObject {
   preload() {
     this.loadSpriteSheet('orb', 128);
+    super.preload();
   }
 
   create() {
@@ -79,6 +122,7 @@ class CompanionGameObject extends GameObject {
       this.companion.animations.add('idle', [1,2], 2, true);
       this.companion.animations.add('turning', [5,6,7,8], 8, true);
       this.companion.animations.play('idle');
+      super.create();
   }
 
   frameUpdate(deltaTime) {
@@ -122,6 +166,8 @@ class CompanionGameObject extends GameObject {
     } else {
       this.companion.body.velocity.x = 0;
     }
+
+    super.frameUpdate(deltaTime);
   }
 }
 
@@ -129,6 +175,7 @@ class CompanionGameObject extends GameObject {
 class PlayerGameObject extends GameObject {
   preload() {
       this.loadSpriteSheet('vix');
+      super.preload();
   }
 
   create() {
@@ -164,6 +211,8 @@ class PlayerGameObject extends GameObject {
     ], 12, true);
 
     this.player.animations.play(this.player.data.idleAnimation);
+
+    super.create();
   }
 
   jump(scalar) {
@@ -222,11 +271,17 @@ class PlayerGameObject extends GameObject {
     this.game.physics.arcade.collide(this.player, this.platforms);
     this.checkJump();
     this.checkMovement();
+    super.frameUpdate(deltaTime);
   }
 }
 
 
 class World extends GameObject {
+  preload() {
+    this.loadSpriteSheet('environment');
+    super.preload();
+  }
+
   create() {
     this.game.world.chargeRate = 0.04;
 
@@ -249,8 +304,7 @@ class World extends GameObject {
     this.ground.body.immovable = true;
     this.platforms.add(this.ground);
 
-    // Why can't I super here? Trick question. ES6 sucks. That's why.
-    GameObject.prototype.create.call(this);
+    super.create();
   }
 }
 
@@ -265,26 +319,23 @@ class ORBIS extends GameObject {
       update: this.frameUpdate.bind(this),
     });
 
-    this.children = [World, PlayerGameObject].map(this.createActor.bind(this));
+    [World, PlayerGameObject].map(this.appendChild.bind(this));
   }
 
-  preload() {
-    this.loadSpriteSheet('environment');
-    GameObject.prototype.preload.call(this);
+  create() {
+    super.create();
   }
 
   frameUpdate() {
     // The game is a special case where we don't have deltaTime yet, because
     // it is the root object which calculates the deltaTime for us.
     this.currentFrameTime = +(new Date);
-    const deltaTime = this.currentFrameTime - this.lastFrameTime;
-    this.callChildren('frameUpdate', deltaTime);
+    this.callChildren('frameUpdate', this.currentFrameTime - this.lastFrameTime);
     this.lastFrameTime = this.currentFrameTime;
   }
 }
 
 
-this.game = new ORBIS;
-
+this.game = new ORBIS();
 
 }).call(this, Phaser, undefined);
