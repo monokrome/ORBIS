@@ -313,7 +313,7 @@ class Backdrop extends GameObject {
   preload() {
     this.MILLISECONDS_IN_ONE_DAY = 86400000;
     this.MILLISECONDS_IN_SIX_HOURS = this.MILLISECONDS_IN_ONE_DAY / 4;
-    this.GAME_DAYS_PER_EARTH_DAY = 128;
+    this.GAME_DAYS_PER_EARTH_DAY = 512;
 
     this.loadSpriteSheet('environment');
     super.preload();
@@ -338,7 +338,7 @@ class Backdrop extends GameObject {
   frameUpdate() {
     const timeUntilEndOfDay = this.getGameTime() % this.MILLISECONDS_IN_ONE_DAY,
           framesLeftInDay = timeUntilEndOfDay / this.MILLISECONDS_IN_SIX_HOURS,
-          currentFrame = 4 - parseInt(framesLeftInDay, 10);
+          currentFrame = 3 - parseInt(framesLeftInDay, 10);
 
     if (this.lastDayNightCycleFrame == currentFrame) return;
     else this.sprite.frame = currentFrame;
