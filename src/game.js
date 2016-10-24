@@ -4,20 +4,19 @@
 const TILE_SIZE = 256;
 
 
-class ORBISGame {
-  constructor() {
-    this.game = new Phaser.Game(1024, 768, Phaser.AUTO, '', {
-      preload: this.onPreload.bind(this),
-      create: this.onCreate.bind(this),
-      update: this.onUpdate.bind(this),
-    });
+class GameObject {
+  constructor(game, parent) {
+    this.game = game;
+    this.parent = parent || null;
 
-    // Phaser docs are messy. What is the right way to do this?...
-    this.game.path = Phaser.Math;
+    this.children = [];
   }
 
-  enableFullScreen() {
-    this.game.stage.scale.startFullScreen();
+  // Utility functions useful for most GameObjects
+  createActor(Kind) { return new Kind(this.game); }
+
+  callChildren(method, ...args) {
+    for (const gameObject of this.children) gameObject[method](...args);
   }
 
   loadSpriteSheet(name, width, height) {
@@ -27,12 +26,6 @@ class ORBISGame {
     );
   }
 
-  onPreload() {
-    this.loadSpriteSheet('vix');
-    this.loadSpriteSheet('environment');
-    this.loadSpriteSheet('orb', 128);
-  }
-
   enablePhysics(subject) {
     this.game.physics.arcade.enable(subject);
     return subject;
@@ -40,50 +33,107 @@ class ORBISGame {
 
   applyGravity(subject) {
     subject.body.gravity.y = 940;
+    return subject;
   }
 
-  createWorld() {
-    this.game.world.chargeRate = 0.04;
+  // Event handlers that can be overriden by your GameObjects
+  preload() { this.callChildren('preload'); }
 
-    this.background = this.game.add.group();
-    this.sky = this.game.add.tileSprite(
-      0, 0,
-      this.game.world.width, this.game.world.height,
-      'environment', 1
-    );
-    this.background.add(this.sky);
-
-    this.platforms = this.game.add.group();
-    this.platforms.enableBody = true;
-    this.ground = this.enablePhysics(this.game.add.tileSprite(
-      0, this.game.world.height - TILE_SIZE,
-      this.game.world.width, TILE_SIZE,
-      'environment', 9
-    ));
-    this.ground.body.immovable = true;
-    this.platforms.add(this.ground);
+  create() {
+    this.game.physics.startSystem(Phaser.Physics.ARCADE);
+    this.callChildren('create');
+    this.lastFrameTime = +(new Date);
   }
 
-  createCompanion() {
-    this.companion = this.enablePhysics(this.game.add.sprite(
-      0, this.game.world.height - (TILE_SIZE * 2),
-      'orb'
-    ));
+  preFrameUpdate() { this.callChildren('preFrameUpdate'); }
+  frameUpdate() {
+    this.currentFrameTime = +(new Date);
+    const deltaTime = this.currentFrameTime - this.lastFrameTime;
+    this.callChildren('frameUpdate', deltaTime);
+    this.lastFrameTime = this.currentFrameTime;
+  }
+  postFrameUpdate() { this.callChildren('postFrameUpdate'); }
+  destroy() { this.callChildren('postFrameUpdate'); }
+}
 
-    Object.assign(this.companion.data, {
-      maxSpeed: 300,
-      thrustAccuracy: 0.1,
-    });
 
-    this.companion.anchor.y = this.companion.anchor.x = 0.56;
-    this.companion.scale.setTo(1.4);
-
-    this.companion.animations.add('idle', [1,2], 2, true);
-    this.companion.animations.add('turning', [5,6,7,8], 8, true);
-    this.companion.animations.play('idle');
+class CompanionGameObject extends GameObject {
+  preload() {
+    this.loadSpriteSheet('orb', 128);
   }
 
-  createPlayer() {
+  create() {
+      this.companion = this.enablePhysics(this.game.add.sprite(
+        0, this.game.world.height - (TILE_SIZE * 2),
+        'orb'
+      ));
+
+      Object.assign(this.companion.data, {
+        maxSpeed: 300,
+        thrustAccuracy: 0.1,
+      });
+
+      this.companion.anchor.y = this.companion.anchor.x = 0.56;
+      this.companion.scale.setTo(1.4);
+
+      this.companion.animations.add('idle', [1,2], 2, true);
+      this.companion.animations.add('turning', [5,6,7,8], 8, true);
+      this.companion.animations.play('idle');
+  }
+
+  frameUpdate(deltaTime) {
+    const idealY = this.player.body.position.y + (TILE_SIZE * 0.2),
+          accuracy = this.companion.data.maxSpeed - (
+            Math.sin(this.currentFrameTime * 0.5)
+            * this.companion.data.thrustAccuracy
+            * this.companion.data.maxSpeed
+          );
+
+    if (this.companion.position.y > idealY) {
+      this.companion.body.velocity.y = accuracy * 0.2;
+    } else if (this.companion.position.y < idealY) {
+      this.companion.body.velocity.y = accuracy * 0.2 * -1;
+    } else {
+      this.companion.body.velocity.y = 0;
+    }
+
+    this.companion.body.velocity.y = ((accuracy) - this.companion.data.maxSpeed);
+
+    if (this.player.body.velocity.x > 0) {
+      const idealX = this.player.body.position.x - (TILE_SIZE * 0.7)
+
+      this.companion.scale.x = 1.4;
+
+      if (this.companion.body.position.x < idealX)
+        this.companion.body.velocity.x = accuracy;
+      else
+        this.companion.body.velocity.x = 0;
+
+    } else if (this.player.body.velocity.x < 0) {
+      const idealX = this.player.body.position.x + this.player.body.width
+                     + (TILE_SIZE * 0.7);
+
+      this.companion.scale.x = -1.4;
+
+      if (this.companion.body.position.x > idealX)
+        this.companion.body.velocity.x = accuracy * -1;
+      else
+        this.companion.body.velocity.x = 0;
+    } else {
+      this.companion.body.velocity.x = 0;
+    }
+  }
+}
+
+
+class PlayerGameObject extends GameObject {
+  preload() {
+      this.loadSpriteSheet('vix');
+  }
+
+  create() {
+    this.cursors = this.game.input.keyboard.createCursorKeys();
+
     this.player = this.enablePhysics(this.game.add.sprite(
       0, this.game.world.height - (TILE_SIZE * 2),
       'vix'
@@ -114,17 +164,6 @@ class ORBISGame {
     ], 12, true);
 
     this.player.animations.play(this.player.data.idleAnimation);
-  }
-
-  onCreate() {
-    this.game.physics.startSystem(Phaser.Physics.ARCADE);
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-
-    this.createWorld();
-    this.createPlayer();
-    this.createCompanion();
-
-    this.lastFrameTime = +(new Date);
   }
 
   jump(scalar) {
@@ -179,70 +218,70 @@ class ORBISGame {
       this.player.body.velocity.x *= 0.8;
   }
 
-  updateWorldState(deltaTime) {}
-
-  updatePlayerCompanionState() {
-    const idealY = this.player.body.position.y + (TILE_SIZE * 0.2),
-          accuracy = this.companion.data.maxSpeed - (
-            Math.sin(this.currentFrameTime * 0.5)
-            * this.companion.data.thrustAccuracy
-            * this.companion.data.maxSpeed
-          );
-
-    if (this.companion.position.y > idealY) {
-      this.companion.body.velocity.y = accuracy * 0.2;
-    } else if (this.companion.position.y < idealY) {
-      this.companion.body.velocity.y = accuracy * 0.2 * -1;
-    } else {
-      this.companion.body.velocity.y = 0;
-    }
-
-    this.companion.body.velocity.y = ((accuracy) - this.companion.data.maxSpeed);
-
-    if (this.player.body.velocity.x > 0) {
-      const idealX = this.player.body.position.x - (TILE_SIZE * 0.7)
-
-      this.companion.scale.x = 1.4;
-
-      if (this.companion.body.position.x < idealX)
-        this.companion.body.velocity.x = accuracy;
-      else
-        this.companion.body.velocity.x = 0;
-
-    } else if (this.player.body.velocity.x < 0) {
-      const idealX = this.player.body.position.x + this.player.body.width
-                     + (TILE_SIZE * 0.7);
-
-      this.companion.scale.x = -1.4;
-
-      if (this.companion.body.position.x > idealX)
-        this.companion.body.velocity.x = accuracy * -1;
-      else
-        this.companion.body.velocity.x = 0;
-    } else {
-      this.companion.body.velocity.x = 0;
-    }
-  }
-
-  updatePlayerState(deltaTime) {
+  frameUpdate(deltaTime) {
     this.game.physics.arcade.collide(this.player, this.platforms);
-    this.checkMovement();
     this.checkJump();
+    this.checkMovement();
+  }
+}
+
+
+class ORBIS extends GameObject {
+  constructor() {
+    super()
+
+    this.game = new Phaser.Game(1024, 768, Phaser.AUTO, '', {
+      preload: this.preload.bind(this),
+      create: this.create.bind(this),
+      update: this.frameUpdate.bind(this),
+    });
+
+    this.children = [PlayerGameObject].map(this.createActor.bind(this));
   }
 
-  onUpdate() {
+  preload() {
+    this.loadSpriteSheet('environment');
+    GameObject.prototype.preload.call(this);
+  }
+
+  create() {
+    this.game.world.chargeRate = 0.04;
+
+    this.background = this.game.add.group();
+    this.sky = this.game.add.tileSprite(
+      0, 0,
+      this.game.world.width, this.game.world.height,
+      'environment', 1
+    );
+    this.background.add(this.sky);
+
+    this.platforms = this.game.add.group();
+    this.platforms.enableBody = true;
+    this.ground = this.enablePhysics(this.game.add.tileSprite(
+      0, this.game.world.height - TILE_SIZE,
+      this.game.world.width, TILE_SIZE,
+      'environment', 9
+    ));
+
+    this.ground.body.immovable = true;
+    this.platforms.add(this.ground);
+
+    // Why can't I super here? Trick question. ES6 sucks. That's why.
+    GameObject.prototype.create.call(this);
+  }
+
+  frameUpdate() {
+    // The game is a special case where we don't have deltaTime yet, because
+    // it is the root object which calculates the deltaTime for us.
     this.currentFrameTime = +(new Date);
     const deltaTime = this.currentFrameTime - this.lastFrameTime;
-
-    this.updateWorldState(deltaTime);
-    this.updatePlayerState(deltaTime);
-    this.updatePlayerCompanionState(deltaTime);
+    this.callChildren('frameUpdate', deltaTime);
     this.lastFrameTime = this.currentFrameTime;
   }
 }
 
 
-this.game = new ORBISGame;
+this.game = new ORBIS;
 
 
 }).call(this, Phaser, undefined);
