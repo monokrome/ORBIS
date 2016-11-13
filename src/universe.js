@@ -4,6 +4,12 @@ import Player from './player';
 
 
 
+const layers = {
+  PLATFORMS: 'Platforms',
+  ENTITIES: 'Entities',
+}
+
+
 export default class Universe extends GameObject {
   constructor(...args) {
       super(...args);
@@ -22,11 +28,10 @@ export default class Universe extends GameObject {
   }
 
   create() {
-    this.level = this.game.add.tilemap('world', 32, 32, 32, 28);
-    this.level.addTilesetImage('environment', 'environment');
+    this.level = this.game.add.tilemap('world', 32, 32, 32, 28); this.level.addTilesetImage('environment', 'environment');
     this.level.createLayer('Scenery');
 
-    const platforms = this.level.createLayer('Platforms'),
+    const platforms = this.level.createLayer(layers.PLATFORMS),
           playerStart = this.getEntityByType('PlayerStart');
 
     super.create();
@@ -36,12 +41,7 @@ export default class Universe extends GameObject {
 
     this.game.physics.enable(this.level);
 
-    this.level.setCollisionBetween(1, 2000);
-
-    return this.game.physics.arcade.collide(
-      this.player.sprite,
-      platforms,
-    );
+    for (const index of [448, 449, 451, 450, 452]) this.level.setCollision(index);
   }
 
   frameUpdate() {
