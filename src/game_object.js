@@ -3,13 +3,21 @@ import constants from './constants';
 
 export default class GameObject {
   constructor(game, parent) {
-    this.game = game;
+    this.game = game || this.createGame();
     this.parent = parent || null;
 
     this.children = new Set;
     this.classNameToChildrenMap = new Map;
 
     const tags = new Set(this.getTags());
+  }
+
+  createGame() {
+    return new Phaser.Game(1024, 768, Phaser.AUTO, '', {
+      preload: this.preload.bind(this),
+      create: this.create.bind(this),
+      update: this.frameUpdate.bind(this),
+    });
   }
 
   // Utility functions useful for most GameObjects
@@ -31,6 +39,8 @@ export default class GameObject {
 
     const set = this.classNameToChildrenMap.get(instance.constructor.name);
     if (!set.has(instance)) set.add(instance);
+
+    return instance;
   }
 
   callChildren(method, ...args) {
@@ -67,9 +77,16 @@ export default class GameObject {
     return this;
   }
 
+  loadLevel(name) {
+  }
+
+  loadImage(name) {
+    this.game.load.image(name, 'assets/Tilesets/' + name + '.png');
+  }
+
   loadSpriteSheet(name, width, height) {
     this.game.load.spritesheet(
-      name, 'assets/' + name + '.png',
+      name, 'assets/Tilesets/' + name + '.png',
       width||constants.TILE_SIZE, height||width||constants.TILE_SIZE
     );
   }

@@ -19,18 +19,21 @@ export default class Player extends GameObject {
   }
 
   preload() {
-    this.loadSpriteSheet('vix');
+    this.game.load.spritesheet(
+      'vix', 'assets/tiles/vix.png',
+      256, 256,
+    );
+
     super.preload();
   }
 
   create() {
-    this.sprite = this.enablePhysics(this.game.add.sprite(
-      0, this.game.world.height - (constants.TILE_SIZE * 2),
-      'vix'
-    ));
+    this.sprite = this.enablePhysics(this.game.add.sprite(20, 20, 'vix'));
 
-    this.applyGravity(this.sprite);
     this.sprite.body.collideWorldBounds = true;
+    this.applyGravity(this.sprite);
+
+    this.sprite.scale.set(0.35, 0.35);
 
     this.sprite.animations.add('idleLeft', [48, 49, 50], 12, true);
     this.sprite.animations.add('idleRight', [32, 33, 34], 12, true);
