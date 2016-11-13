@@ -1,3 +1,7 @@
+# Lock & PID files
+*.lock
+*.pid
+
 # Build output
 /dist/*
 
